@@ -1,0 +1,93 @@
+AM_CPPFLAGS = \
+	-DLOCALEDIR=\"$(datadir)/locale\" \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/common \
+	-I$(top_srcdir)/libcstring \
+	-I$(top_srcdir)/liberror \
+	-I$(top_srcdir)/libnotify \
+	@LIBUNA_CPPFLAGS@ \
+	@LIBBFIO_CPPFLAGS@ \
+	@LIBFCACHE_CPPFLAGS@ \
+	@LIBFDATA_CPPFLAGS@ \
+	@LIBFDATETIME_CPPFLAGS@ \
+	@LIBFGUID_CPPFLAGS@ \
+	@LIBFVALUE_CPPFLAGS@ \
+	@MEMWATCH_CPPFLAGS@
+
+lib_LTLIBRARIES = libesedb.la
+
+libesedb_la_SOURCES = \
+	esedb_file_header.h \
+	esedb_page.h \
+	esedb_page_values.h \
+	libesedb.c \
+	libesedb_array_type.c libesedb_array_type.h \
+	libesedb_catalog.c libesedb_catalog.h \
+	libesedb_catalog_definition.c libesedb_catalog_definition.h \
+	libesedb_checksum.c libesedb_checksum.h \
+	libesedb_codepage.c libesedb_codepage.h \
+	libesedb_column.c libesedb_column.h \
+	libesedb_column_type.c libesedb_column_type.h \
+	libesedb_compression.c libesedb_compression.h \
+	libesedb_database.c libesedb_database.h \
+	libesedb_debug.c libesedb_debug.h \
+	libesedb_definitions.h \
+	libesedb_error.c libesedb_error.h \
+	libesedb_extern.h \
+	libesedb_file.c libesedb_file.h \
+	libesedb_i18n.c libesedb_i18n.h \
+	libesedb_index.c libesedb_index.h \
+	libesedb_io_handle.c libesedb_io_handle.h \
+	libesedb_lcid.c libesedb_lcid.h \
+	libesedb_legacy.c libesedb_legacy.h \
+	libesedb_libbfio.h \
+	libesedb_libfcache.h \
+	libesedb_libfdata.h \
+	libesedb_libfvalue.h \
+	libesedb_libuna.h \
+	libesedb_list_type.c libesedb_list_type.h \
+	libesedb_long_value.c libesedb_long_value.h \
+	libesedb_multi_value.c libesedb_multi_value.h \
+	libesedb_notify.c libesedb_notify.h \
+	libesedb_page.c libesedb_page.h \
+	libesedb_page_tree.c libesedb_page_tree.h \
+	libesedb_record.c libesedb_record.h \
+	libesedb_support.c libesedb_support.h \
+	libesedb_table.c libesedb_table.h \
+	libesedb_table_definition.c libesedb_table_definition.h \
+	libesedb_types.h \
+	libesedb_unused.h \
+	libesedb_values_tree.c libesedb_values_tree.h \
+	libesedb_values_tree_value.c libesedb_values_tree_value.h
+
+libesedb_la_LIBADD = \
+	../libcstring/libcstring.la \
+	../liberror/liberror.la \
+	../libnotify/libnotify.la \
+	@LIBUNA_LIBADD@ \
+	@LIBBFIO_LIBADD@ \
+	@LIBFCACHE_LIBADD@ \
+	@LIBFDATA_LIBADD@ \
+	@LIBFDATETIME_LIBADD@ \
+	@LIBFGUID_LIBADD@ \
+	@LIBFVALUE_LIBADD@
+
+libesedb_la_LDFLAGS = -no-undefined -version-info 1:0:0
+
+EXTRA_DIST = \
+	libesedb_definitions.h.in \
+	libesedb.rc \
+	libesedb.rc.in
+
+MAINTAINERCLEANFILES = \
+	Makefile.in
+
+distclean: clean
+	/bin/rm -f libesedb_definitions.h
+	/bin/rm -f libesedb.rc
+	/bin/rm -f Makefile
+
+splint:
+	@echo "Running splint on libesedb ..." 
+	-splint -preproc -redef $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(libesedb_la_SOURCES) 
+
